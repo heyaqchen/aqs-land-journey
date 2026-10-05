@@ -1,0 +1,47 @@
+/* Keep the two observation cards connected by lines only. */
+.thought-pair > .thought-bubble::after { display: none; }
+.interventions { margin: 72px 0 45px; }
+.intervention-heading h2 { margin: 0 0 15px; color: #2b526e; font-size: clamp(27px,3vw,40px); line-height: 1.4; font-weight: 650; }
+.intervention-heading > p:last-child { margin: 0; color: #57788d; font-size: clamp(17px,1.6vw,21px); line-height: 1.8; }
+.intervention-intensity { display: flex; align-items: center; gap: 16px; margin: 30px 0 17px; color: #6d8594; font-size: 13px; }
+.intervention-intensity i { position: relative; height: 3px; flex: 1; background: linear-gradient(90deg,#92bfde,#e8d477,#e1a669,#d68e8e); }
+.intervention-intensity i::after { content: ''; position: absolute; right: -1px; top: -4px; width: 10px; height: 10px; border-top: 2px solid #c88282; border-right: 2px solid #c88282; transform: rotate(45deg); }
+.intervention-scroll { overflow-x: auto; border: 1px solid #b8cbd8; border-radius: 18px; background: #fff; scrollbar-color: #9bb9cb #eff6fa; }
+.intervention-scroll:focus-visible { outline: 3px solid #6e9fbc; outline-offset: 4px; }
+.intervention-matrix { border-spacing: 0; width: 100%; min-width: 760px; table-layout: fixed; font-size: 17px; color: #39596b; }
+.intervention-matrix .layer-col { width: 23%; }
+.intervention-matrix .state-a { background: #eaf4fc; --state-line: #81b2d4; }
+.intervention-matrix .state-b { background: #fff9df; --state-line: #d6bd5b; }
+.intervention-matrix .state-c { background: #fff0df; --state-line: #dca264; }
+.intervention-matrix .state-d { background: #fbe8e8; --state-line: #ce8d91; }
+.intervention-matrix th, .intervention-matrix td { padding: 24px 18px; line-height: 1.75; text-align: center; border-right: 1px solid #afc3cf55; border-bottom: 1px solid #afc3cf77; overflow-wrap: break-word; }
+.intervention-matrix th:last-child, .intervention-matrix td:last-child { border-right: 0; }
+.intervention-matrix thead th { border-top: 3px solid transparent; padding-top: 20px; padding-bottom: 20px; font-weight: 600; }
+.intervention-matrix thead th.state-a { border-top: 2px solid var(--state-line); }
+.intervention-matrix thead th.state-b { border-top: 3px solid var(--state-line); }
+.intervention-matrix thead th.state-c { border-top: 4px solid var(--state-line); }
+.intervention-matrix thead th.state-d { border-top: 5px solid var(--state-line); }
+.intervention-matrix thead b { display: block; font: 27px Georgia,serif; margin-bottom: 8px; color: #3e5a6b; }
+.intervention-matrix th:first-child { background: #f6fafc; text-align: left; color: #365c76; }
+.intervention-matrix tbody th { font-weight: 600; }
+.layer-index { font: italic 15px Georgia,serif; color: #8ba4b4; margin-right: 11px; }
+.intervention-matrix th small { display: block; font-size: 13px; color: #7992a3; font-weight: 400; margin-top: 5px; }
+.feedback-note { margin: 12px 0 0; padding: 8px 10px; border: 1px dashed #abc4d4; border-radius: 7px; background: #fff9; font-size: 12px; font-weight: 400; color: #6a8395; line-height: 1.7; }
+.tone-swatch { display: block; width: 38px; height: 22px; margin: 0 auto 9px; border: 1px solid var(--state-line); border-radius: 7px; box-shadow: inset 0 0 0 4px #fff7; }
+.intervention-matrix .calibration-row th, .intervention-matrix .calibration-row td { border-bottom: 0; border-top: 2px solid #a8c4d5; }
+.calibration-row td { background: #e7f0f6; color: #44667d; }
+.calibration-items { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 12px; }
+.calibration-items i { color: #8eabbc; font-style: normal; }
+.intervention-takeaway { padding: 21px; margin: 22px 0 0; text-align: center; font-size: 18px; line-height: 1.8; color: #4d768c; border-bottom: 1px solid #b1c9d8; }
+.matrix-scroll-hint { display: none; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* Use the same scaled 390 × 780 viewport as the plan and summary phones. */
+.phone-viewport { overscroll-behavior: contain; }
+@media(max-width:850px) {
+  .interventions { margin-top: 50px; }
+  .intervention-matrix { font-size: 15px; }
+  .intervention-matrix th, .intervention-matrix td { padding: 20px 15px; }
+  .intervention-matrix th:first-child { position: sticky; left: 0; z-index: 1; box-shadow: 3px 0 6px #526c7910; }
+  .matrix-scroll-hint { display: block; color: #7494a9; font-size: 12px; text-align: right; margin: 12px 0; }
+  .intervention-takeaway { font-size: 16px; }
+}

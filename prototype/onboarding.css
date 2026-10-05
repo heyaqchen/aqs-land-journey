@@ -1,0 +1,24 @@
+#entry.onboarding-entry{display:grid;place-items:center;padding:24px;background:#fafbfc}
+.onboarding{width:min(470px,100%);min-height:min(650px,calc(100svh - 48px));display:flex;flex-direction:column;padding:24px 28px 30px;border:2px solid #3478ed;border-radius:22px;background:#fff;color:#3478ed}
+.onboarding-top{display:flex;justify-content:space-between;align-items:center;min-height:38px}
+.onboarding-brand{font:italic 700 24px/1.2 "Trebuchet MS",sans-serif;letter-spacing:-1px}.onboarding-brand b{color:#ff942e}
+.onboarding-skip,.onboarding-back,.onboarding-later{border:0;background:transparent;color:#8c9ab1;padding:8px;font-size:14px}
+.onboarding-skip:hover,.onboarding-back:hover,.onboarding-later:hover{background:transparent;color:#3478ed}
+.onboarding-main{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 0}
+.onboarding-icon{height:165px;width:165px;border:2px solid #d7e5ff;border-radius:34px;display:grid;place-items:center;background:#f6f9ff;margin-bottom:28px}
+.onboarding-icon svg{width:116px;height:116px;fill:none;stroke:#3478ed;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.onboarding h1{font-size:27px;line-height:1.35;margin:0 0 16px;color:#273e69}
+.onboarding-description{max-width:350px;margin:0;color:#7588a8;font-size:16px;line-height:1.8}
+.onboarding-bottom{display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.onboarding-dots{display:flex;justify-content:center;gap:8px;margin-bottom:12px}.onboarding-dots span{height:7px;width:7px;border-radius:50%;background:#c9d6eb}.onboarding-dots span.active{width:22px;border-radius:10px;background:#3478ed}
+.onboarding-primary{border:2px solid #3478ed;background:#3478ed;color:white;border-radius:12px;padding:12px 20px;min-height:49px;font-size:16px;font-weight:600}.onboarding-primary:hover{background:#2869d7}
+.onboarding-back{align-self:flex-start}
+.onboarding-message-page .onboarding-main{align-items:stretch;text-align:left;justify-content:flex-start;padding:12px 0 20px}
+.onboarding-message-page .onboarding-icon{width:84px;height:84px;border-radius:22px;margin:0 auto 18px}.onboarding-message-page .onboarding-icon svg{width:68px;height:68px}
+.onboarding-message-page h1{font-size:25px;text-align:center}.onboarding-message-page .onboarding-description{max-width:none;font-size:15px;text-align:center}
+.future-rows{display:grid;gap:11px;width:100%;margin-top:26px}.future-row{display:grid;grid-template-columns:minmax(0,1fr) 103px 25px;gap:8px;align-items:center}
+.future-row input,.future-row select{height:44px;min-width:0;border:1px solid #b9ceee;border-radius:10px;background:white;color:#263b66;padding:0 10px;font-size:14px}.future-row input::placeholder{color:#a0abc0}.future-row select{padding:0 5px}
+.future-row .remove-message{border:0;background:none;color:#91a0b8;font-size:21px;line-height:1}
+.add-message{align-self:flex-start;margin-top:13px;border:1px dashed #8cadde;border-radius:10px;padding:8px 13px;background:white;color:#3478ed;font-size:14px}.add-message:disabled{opacity:.4;cursor:default}
+.message-count{margin:11px 0 0;color:#91a0b8;font-size:12px}
+@media(max-width:480px){#entry.onboarding-entry{padding:0}.onboarding{border:0;border-radius:0;width:100%;min-height:100svh;padding:20px 22px 28px}.onboarding-icon{width:145px;height:145px}.onboarding-icon svg{width:105px;height:105px}.onboarding h1{font-size:24px}.future-row{grid-template-columns:minmax(0,1fr) 91px 22px}}
