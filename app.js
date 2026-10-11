@@ -13,16 +13,16 @@ function layoutJourney(){
  const heights=nodes.map(n=>n.querySelector('.node-copy').getBoundingClientRect().height);
  let ys,xs,h,d,tapers;
  if(mobile){
-  ys=[190];for(let i=1;i<6;i++)ys.push(ys[i-1]+heights[i-1]+(i===4?235:170));h=ys[5]+heights[5]+85;xs=Array(6).fill(w*.525);
+  ys=[190];for(let i=1;i<nodes.length;i++)ys.push(ys[i-1]+heights[i-1]+(i===4?235:170));h=ys.at(-1)+heights.at(-1)+85;xs=Array(nodes.length).fill(w*.525);
   const l=w*.08,r=w*.95;d=`M ${w} ${ys[0]} H ${l+25}`;
-  for(let i=0;i<5;i++){const atLeft=i%2===0,a=atLeft?l:r,other=atLeft?r-25:l+25,y=ys[i],end=ys[i+1];d+=` Q ${a} ${y} ${a} ${y+35} V ${end-35} Q ${a} ${end} ${atLeft?a+25:a-25} ${end} H ${other}`;}
-  d+=` H ${w}`;tapers='';
+  for(let i=0;i<nodes.length-1;i++){const atLeft=i%2===0,a=atLeft?l:r,other=atLeft?r-25:l+25,y=ys[i],end=ys[i+1];d+=` Q ${a} ${y} ${a} ${y+35} V ${end-35} Q ${a} ${end} ${atLeft?a+25:a-25} ${end} H ${other}`;}
+  d+=` H ${nodes.length%2?0:w}`;tapers='';
  }else{
-  ys=[200];ys.push(ys[0]+Math.max(heights[0],heights[1])+190);ys.push(ys[1]+Math.max(heights[2],heights[3])+195);h=ys[2]+Math.max(heights[4],heights[5])+110;
+  ys=[200];ys.push(ys[0]+Math.max(heights[0],heights[1])+190);ys.push(ys[1]+Math.max(heights[2],heights[3])+195);h=ys[2]+heights[4]+110;
   const l=w*.04643,r=w*.95357,le=w*.1357,re=w*.8643,a=ys[0],b=ys[1],c=ys[2];
-  d=`M ${w-100} ${a} H ${le} Q ${l} ${a} ${l} ${a+80} V ${b-80} Q ${l} ${b} ${le} ${b} H ${re} Q ${r} ${b} ${r} ${b+80} V ${c-80} Q ${r} ${c} ${re} ${c} H 100`;
-  tapers=`M ${w} ${a} Q ${w-50} ${a} ${w-100} ${a-2.5} V ${a+2.5} Q ${w-50} ${a} ${w} ${a} Z M 0 ${c} Q 50 ${c} 100 ${c-2.5} V ${c+2.5} Q 50 ${c} 0 ${c} Z`;
-  xs=[w*.70,w*.35,w*.35,w*.70,w*.70,w*.35];ys=[ys[0],ys[0],ys[1],ys[1],ys[2],ys[2]];
+  d=`M ${w-100} ${a} H ${le} Q ${l} ${a} ${l} ${a+80} V ${b-80} Q ${l} ${b} ${le} ${b} H ${re} Q ${r} ${b} ${r} ${b+80} V ${c-80} Q ${r} ${c} ${re} ${c} H ${w*.5}`;
+  tapers=`M ${w} ${a} Q ${w-50} ${a} ${w-100} ${a-2.5} V ${a+2.5} Q ${w-50} ${a} ${w} ${a} Z`;
+  xs=[w*.70,w*.35,w*.35,w*.70,w*.70];ys=[ys[0],ys[0],ys[1],ys[1],ys[2]];
  }
  track.style.height=h+'px';const svg=track.querySelector('.route');svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.innerHTML=`<path d="${d}" fill="none" stroke="currentColor" stroke-width="${mobile?3:5}"/><path d="${tapers}" fill="currentColor"/>`;
  nodes.forEach((n,i)=>{n.style.left=xs[i]+'px';n.style.top=ys[i]+'px'});
@@ -31,6 +31,7 @@ function layoutJourney(){
  walking.style.top=(ys[0]-walking.getBoundingClientRect().height-5)+'px';
  cat.style.width=mobile?'100px':'';cat.style.left=(w*(mobile?.08:.04643))+'px';cat.style.top=(mobile?ys[0]+heights[0]+75:(ys[0]+ys[2])/2)+'px';
  // The drawing ends at pixel 964 of the 1024px asset; align its feet to the route.
+ running.style.left=mobile?'':(w*.5)+'px';
  running.style.top=(ys[4]-running.getBoundingClientRect().height*(964/1024)+1)+'px';
 }
 const journeyObserver=new ResizeObserver(()=>layoutJourney());journeyObserver.observe(document.querySelector('.timeline'));
