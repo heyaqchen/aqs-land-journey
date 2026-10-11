@@ -5,34 +5,50 @@
   const names=['平时练习','考场模拟','游戏模式','无限模式'];
   const files=['practice.html','exam.html','game.html','infinite.html'];
   const stage=document.getElementById('demo-stage');
-  let active=0,started=false,pending=false,timer,clearDocumentFit=()=>{};
+  let active=0,started=false,pending=false,timer,preparedDocument=null,clearDocumentFit=()=>{};
   const viewport=document.createElement('div');viewport.className='phone-viewport';frame.before(viewport);viewport.append(frame);
-  function fitPhone(){const scale=viewport.clientWidth/390;viewport.style.height=(780*scale)+'px';frame.style.transform='scale('+scale+')';}
+  let documentWidth=390,documentHeight=780;
+  frame.setAttribute('scrolling','no');
+  function fitPhone(){
+    const width=viewport.clientWidth;if(!width)return;
+    const height=width*2,scale=Math.min(width/documentWidth,height/documentHeight);
+    viewport.style.height=height+'px';
+    frame.style.setProperty('width',documentWidth+'px','important');
+    frame.style.setProperty('height',documentHeight+'px','important');
+    frame.style.position='absolute';frame.style.top='0';
+    frame.style.left=((width-documentWidth*scale)/2)+'px';
+    frame.style.transform='scale('+scale+')';
+  }
   new ResizeObserver(fitPhone).observe(viewport);fitPhone();
   function fitWholeDocument(doc,stylesheet){
     clearDocumentFit();
     const body=doc.body,fitStyle=doc.createElement('style');
-    fitStyle.textContent='html{height:100%;overflow:hidden!important}body{position:relative;width:390px!important;max-width:none!important;min-height:0!important;margin:0!important;transform-origin:top left;overflow:visible!important}';
+    // Give the iframe the full page height, then scale the iframe itself. Scaling
+    // only the body leaves its unscaled layout/scroll area inside a short viewport.
+    fitStyle.textContent='html{height:auto!important;min-height:0!important;overflow:hidden!important;scrollbar-width:none}body{display:flow-root!important;position:relative;width:390px!important;max-width:none!important;min-height:0!important;height:auto!important;margin:0!important;transform:none!important;overflow:visible!important;box-sizing:border-box}';
     doc.head.append(fitStyle);
     let scheduled=0,disposed=false;
     function fit(){
       scheduled=0;if(disposed)return;
       // Keep the full document visible, including feedback revealed after answering.
-      const width=Math.max(390,body.scrollWidth),height=Math.max(1,body.offsetHeight,body.scrollHeight);
-      const scale=Math.min(1,386/width,772/height);
-      const transform='translate('+((390-width*scale)/2)+'px,4px) scale('+scale+')';
-      if(body.style.transform!==transform)body.style.transform=transform;
+      documentWidth=Math.ceil(Math.max(390,body.scrollWidth,body.offsetWidth));
+      // flow-root includes the last child's margin. Fixed bubbles/dialogs must
+      // not feed the iframe viewport height back into this content measurement.
+      documentHeight=Math.ceil(Math.max(780,body.offsetHeight+8));
+      fitPhone();
     }
     function schedule(){if(!scheduled&&!disposed)scheduled=requestAnimationFrame(fit);}
     const resize=new ResizeObserver(schedule);resize.observe(body);
     const mutations=new MutationObserver(records=>{if(records.some(record=>record.type!=='attributes'||record.target!==body))schedule();});
-    mutations.observe(body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','class','style']});
+    mutations.observe(body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','class','style','open']});
     stylesheet.addEventListener('load',schedule);
+    doc.addEventListener('load',schedule,true);
+    doc.defaultView.addEventListener('resize',schedule);
     doc.fonts.ready.then(schedule);schedule();
-    clearDocumentFit=()=>{disposed=true;resize.disconnect();mutations.disconnect();cancelAnimationFrame(scheduled);stylesheet.removeEventListener('load',schedule);};
+    clearDocumentFit=()=>{disposed=true;resize.disconnect();mutations.disconnect();cancelAnimationFrame(scheduled);stylesheet.removeEventListener('load',schedule);doc.removeEventListener('load',schedule,true);doc.defaultView?.removeEventListener('resize',schedule);};
   }
   function replay(){
-    clearTimeout(timer);pending=true;started=true;
+    clearTimeout(timer);clearDocumentFit();documentWidth=390;documentHeight=780;fitPhone();pending=true;started=true;
     stage.textContent=names[active]+' · 模式入口';
     frame.title='AdvanCE 手机交互原型：'+names[active];
     frame.src='prototype/index.html?view=home&tour='+active+'&replay='+Date.now();
@@ -48,7 +64,8 @@
   }
   frame.addEventListener('load',()=>{
     clearTimeout(timer);
-    const doc=frame.contentDocument;if(!doc)return;
+    const doc=frame.contentDocument;if(!doc?.body||!doc.querySelector('main')||doc===preparedDocument)return;
+    preparedDocument=doc;
     // Hosted static pages can use directory or extensionless URLs.
     const current=doc.querySelector('main[aria-label="AdvanCE 学习首页"]')?'index.html':(doc.location.pathname.split('/').pop()||'index').replace(/\.html$/,'')+'.html';
     const fitStyle=doc.createElement('style');
@@ -56,7 +73,7 @@
     if(current==='index.html')fitStyle.textContent+='body{padding:18px;display:block}main{width:100%;max-width:420px;min-width:0;margin:0 auto}header{margin-bottom:17px}.screen{padding:17px}.profile{margin-bottom:15px}.widget{height:42px}.widgets{gap:9px}.controls{margin-top:12px;height:242px}.bottom{margin-top:12px}.foot{height:0}.status{margin-top:5px}';
     doc.head.append(fitStyle);
     doc.body.dataset.phonePage=current.replace('.html','');
-    const phoneStyle=doc.createElement('link');phoneStyle.rel='stylesheet';phoneStyle.href='phone-fit.css?v=20261005';doc.head.append(phoneStyle);
+    const phoneStyle=doc.createElement('link');phoneStyle.rel='stylesheet';phoneStyle.href='phone-fit.css?v=20261011';doc.head.append(phoneStyle);
     fitWholeDocument(doc,phoneStyle);
     function explain(text){stage.textContent=text;}
     if(current==='index.html'){
