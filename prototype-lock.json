@@ -1,0 +1,36 @@
+{
+  "reason": "User-requested freeze after homepage adaptation and guided tour repair, 2026-10-11",
+  "files": {
+    "prototype-tour.js": "e28a42e15cf7c43eb3ad9d6de9ee627b02e6cf81ba0735bb76a09d5e3ef3bb3b",
+    "prototype/phone-embed.js": "ff37075a04e7e346d6d426d600e76c6ee62eaf2ad5d57076c2d742d85a5837be",
+    "prototype/phone-fit.css": "162c346177d2f4fe3c809fc9a2fa7071dcc390d5b2499f11f9760b42c15b928d",
+    "prototype/home-phone.css": "bee6a03001864cacafbdc90c1c5589f424b478c14a61179718f5823d89f10a97",
+    "prototype/tour-guide.js": "7c3874bd2c5cdaae1a02d79af2415242d86a24de459d547213ed475ee88f32bc",
+    "prototype/interaction-tools.js": "0f9d375a54e84ff066b287f0cdd0b873019538da4680d4d4e748b1e1e4d84888",
+    "prototype/index.html": "95340ade3d5fe6b767ed373bbbe8e3557d8d0ed10f18f6ced5b45b4daf5907e9",
+    "prototype/practice.html": "8c589ba81caba1cd8df97f3f5c88c2e72cddf945d930da68ca850c3c3ef8e418",
+    "prototype/exam.html": "5c1cd7bf6b024c605309623e1bb7a970806c1a31c92977931f3440812217f48f",
+    "prototype/game.html": "9027de9c9967219cd52c7cd30f7b7d10b7058cde757149d2d35ceae7209dbca6",
+    "prototype/infinite.html": "394f225425ca0449b9b1d407a9d28e3de413342f82c9510ad339172807fb978b",
+    "prototype/entry.js": "2a54b683c0eb73400215e48ddd7331052b03a5de10311ed5c8537ae04dce1fcb",
+    "prototype/onboarding.js": "6817bb282adc94185cd7f2a9421c6e36cf76ecfc5a08ad9353c3c360d3316111"
+  },
+  "fragments": {
+    "phoneFrame": {
+      "file": "index.html",
+      "sha256": "c1a627c9b65f8a3f6978992d1a7b3065d85ec0f5102003aebaf405e4f6155039"
+    },
+    "tourScript": {
+      "file": "index.html",
+      "sha256": "622ee348ffc5895fa19dd97cc9bdc580f257c6444d8bbe94a7c53f2175a3ca45"
+    },
+    "tourStyles": {
+      "file": "style.css",
+      "sha256": "a2fc3a5875578a27387d0d625bd55b4ec66809a3a146d2ef5d551a3a29f7fe2c"
+    },
+    "desktopPhone": {
+      "file": "style.css",
+      "sha256": "7efd69a79f0753e1393b452cbd97ab7af5392f55b6079d73684d8c2abff993ce"
+    }
+  }
+}

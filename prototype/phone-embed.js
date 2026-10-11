@@ -2,7 +2,7 @@
   // Only the portfolio tour uses whole-page scaling; standalone prototypes and
   // the separate plans/summary previews retain their existing layouts.
   if (window.frameElement?.id !== 'prototype-frame') return;
-  const page = location.pathname.split('/').pop().replace(/\.html$/, '') || 'index';
+  const page = document.querySelector('main[aria-label="AdvanCE 学习首页"]') ? 'index' : (location.pathname.split('/').pop().replace(/\.html$/, '') || 'index');
   document.documentElement.classList.add('phone-embedded');
   document.body.dataset.phonePage = page;
 
@@ -48,4 +48,8 @@
     parent.postMessage({ type: 'advance-phone-ready' }, location.origin);
   }, { once: true });
   document.head.append(sheet);
+  // Guidance belongs to the child page and must not depend on iframe load timing.
+  const guide = document.createElement('script');
+  guide.src = 'tour-guide.js?v=20261011-locked';
+  document.head.append(guide);
 })();
