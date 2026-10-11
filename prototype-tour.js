@@ -5,50 +5,23 @@
   const names=['平时练习','考场模拟','游戏模式','无限模式'];
   const files=['practice.html','exam.html','game.html','infinite.html'];
   const stage=document.getElementById('demo-stage');
-  let active=0,started=false,pending=false,timer,preparedDocument=null,clearDocumentFit=()=>{};
+  let active=0,started=false,pending=false,timer,preparedDocument=null;
   const viewport=document.createElement('div');viewport.className='phone-viewport';frame.before(viewport);viewport.append(frame);
-  let documentWidth=390,documentHeight=780;
   frame.setAttribute('scrolling','no');
   function fitPhone(){
     const width=viewport.clientWidth;if(!width)return;
-    const height=width*2,scale=Math.min(width/documentWidth,height/documentHeight);
-    viewport.style.height=height+'px';
-    frame.style.setProperty('width',documentWidth+'px','important');
-    frame.style.setProperty('height',documentHeight+'px','important');
+    // Keep a stable mobile viewport. Each prototype fits its own content inside it.
+    // Resizing the iframe to its document height creates a viewport/layout loop.
+    viewport.style.height=(width*2)+'px';
+    frame.style.setProperty('width','390px','important');
+    frame.style.setProperty('height','780px','important');
     frame.style.position='absolute';frame.style.top='0';
-    frame.style.left=((width-documentWidth*scale)/2)+'px';
-    frame.style.transform='scale('+scale+')';
+    frame.style.left='0';
+    frame.style.transform='scale('+(width/390)+')';
   }
   new ResizeObserver(fitPhone).observe(viewport);fitPhone();
-  function fitWholeDocument(doc,stylesheet){
-    clearDocumentFit();
-    const body=doc.body,fitStyle=doc.createElement('style');
-    // Give the iframe the full page height, then scale the iframe itself. Scaling
-    // only the body leaves its unscaled layout/scroll area inside a short viewport.
-    fitStyle.textContent='html{height:auto!important;min-height:0!important;overflow:hidden!important;scrollbar-width:none}body{display:flow-root!important;position:relative;width:390px!important;max-width:none!important;min-height:0!important;height:auto!important;margin:0!important;transform:none!important;overflow:visible!important;box-sizing:border-box}';
-    doc.head.append(fitStyle);
-    let scheduled=0,disposed=false;
-    function fit(){
-      scheduled=0;if(disposed)return;
-      // Keep the full document visible, including feedback revealed after answering.
-      documentWidth=Math.ceil(Math.max(390,body.scrollWidth,body.offsetWidth));
-      // flow-root includes the last child's margin. Fixed bubbles/dialogs must
-      // not feed the iframe viewport height back into this content measurement.
-      documentHeight=Math.ceil(Math.max(780,body.offsetHeight+8));
-      fitPhone();
-    }
-    function schedule(){if(!scheduled&&!disposed)scheduled=requestAnimationFrame(fit);}
-    const resize=new ResizeObserver(schedule);resize.observe(body);
-    const mutations=new MutationObserver(records=>{if(records.some(record=>record.type!=='attributes'||record.target!==body))schedule();});
-    mutations.observe(body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','class','style','open']});
-    stylesheet.addEventListener('load',schedule);
-    doc.addEventListener('load',schedule,true);
-    doc.defaultView.addEventListener('resize',schedule);
-    doc.fonts.ready.then(schedule);schedule();
-    clearDocumentFit=()=>{disposed=true;resize.disconnect();mutations.disconnect();cancelAnimationFrame(scheduled);stylesheet.removeEventListener('load',schedule);doc.removeEventListener('load',schedule,true);doc.defaultView?.removeEventListener('resize',schedule);};
-  }
   function replay(){
-    clearTimeout(timer);clearDocumentFit();documentWidth=390;documentHeight=780;fitPhone();pending=true;started=true;
+    clearTimeout(timer);fitPhone();pending=true;started=true;
     stage.textContent=names[active]+' · 模式入口';
     frame.title='AdvanCE 手机交互原型：'+names[active];
     frame.src='prototype/index.html?view=home&tour='+active+'&replay='+Date.now();
@@ -62,7 +35,7 @@
     if(focus)tabs[active].focus();
     if(reload)replay();
   }
-  frame.addEventListener('load',()=>{
+  function prepareDocument(){
     clearTimeout(timer);
     const doc=frame.contentDocument;if(!doc?.body||!doc.querySelector('main')||doc===preparedDocument)return;
     preparedDocument=doc;
@@ -70,11 +43,7 @@
     const current=doc.querySelector('main[aria-label="AdvanCE 学习首页"]')?'index.html':(doc.location.pathname.split('/').pop()||'index').replace(/\.html$/,'')+'.html';
     const fitStyle=doc.createElement('style');
     fitStyle.textContent='html{overflow-x:hidden}body{max-width:100%;overflow-wrap:break-word}img{max-width:100%}.topbar,.topinner{max-width:100%}.pager{flex-wrap:wrap}select{max-width:100%}.tour-highlight{box-shadow:0 0 0 5px #ffb65a99,0 0 24px #ffb65a88!important;outline:2px solid #f69a28;outline-offset:5px}.tour-confirm{background:#ff942e!important;color:#fff!important;border-color:#ff942e!important;box-shadow:0 0 0 7px #ffb65a66,0 0 28px #ffb65aaa!important;animation:confirm-glow .6s ease-in-out infinite alternate}@keyframes confirm-glow{to{box-shadow:0 0 0 10px #ffb65a33,0 0 34px #ffb65abb}}@media(prefers-reduced-motion:reduce){.tour-confirm{animation:none}}';
-    if(current==='index.html')fitStyle.textContent+='body{padding:18px;display:block}main{width:100%;max-width:420px;min-width:0;margin:0 auto}header{margin-bottom:17px}.screen{padding:17px}.profile{margin-bottom:15px}.widget{height:42px}.widgets{gap:9px}.controls{margin-top:12px;height:242px}.bottom{margin-top:12px}.foot{height:0}.status{margin-top:5px}';
     doc.head.append(fitStyle);
-    doc.body.dataset.phonePage=current.replace('.html','');
-    const phoneStyle=doc.createElement('link');phoneStyle.rel='stylesheet';phoneStyle.href='phone-fit.css?v=20261011';doc.head.append(phoneStyle);
-    fitWholeDocument(doc,phoneStyle);
     function explain(text){stage.textContent=text;}
     if(current==='index.html'){
       pending=false;
@@ -94,12 +63,17 @@
         doc.addEventListener('prototype-interaction',event=>{if(step==='mark'&&event.detail.type==='mark'){step='exclude';stem.classList.remove('tour-highlight');doc.querySelectorAll('.option').forEach(el=>el.classList.add('tour-highlight'));explain('④ 已完成勾画！长按一个选项将它排除，再次长按可恢复；键盘可按 Delete。');}else if(step==='exclude'&&event.detail.type==='exclude'){step='answer';doc.querySelectorAll('.tour-highlight').forEach(el=>el.classList.remove('tour-highlight'));explain(i===1?'⑤ 排除完成。现在选择保留的答案，继续作答；交卷后可查看报告。':'⑤ 排除完成。现在选择保留的答案并提交，继续体验解析和其他功能。');}});
       }else explain(i===2?'③ 请点击手机里的理论泡泡，体验配对游戏。':'可在手机内继续操作，或点击「重看模式入口」重新体验。');
     }
+  }
+  frame.addEventListener('load',prepareDocument);
+  // The child announces DOM readiness; do not wait for every asset's load event.
+  window.addEventListener('message',event=>{
+    if(event.origin===location.origin&&event.source===frame.contentWindow&&event.data?.type==='advance-phone-ready')prepareDocument();
   });
   tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>select(i));tab.addEventListener('keydown',event=>{let index;if(event.key==='ArrowRight')index=(i+1)%4;else if(event.key==='ArrowLeft')index=(i+3)%4;else if(event.key==='Home')index=0;else if(event.key==='End')index=3;if(index!==undefined){event.preventDefault();select(index,true);}});});
   document.getElementById('previous-mode').addEventListener('click',()=>select(active-1));
   document.getElementById('next-mode').addEventListener('click',()=>select(active+1));
   document.getElementById('replay-mode').addEventListener('click',replay);
-  function route(){if(!root.hidden){if(!started)replay();}else{clearTimeout(timer);clearDocumentFit();pending=false;started=false;frame.removeAttribute('src');}}
+  function route(){if(!root.hidden){if(!started)replay();}else{clearTimeout(timer);pending=false;started=false;frame.removeAttribute('src');}}
   window.addEventListener('hashchange',route);route();
 })();
 
