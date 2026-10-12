@@ -1,13 +1,13 @@
 {
-  "reason": "User-requested freeze after homepage adaptation and guided tour repair, 2026-10-11",
+  "reason": "User-requested freeze after homepage/guide repair (2026-10-11); explicit homepage-only update removing inner hints and rebalancing spacing (2026-10-12).",
   "files": {
     "prototype-tour.js": "e28a42e15cf7c43eb3ad9d6de9ee627b02e6cf81ba0735bb76a09d5e3ef3bb3b",
     "prototype/phone-embed.js": "ff37075a04e7e346d6d426d600e76c6ee62eaf2ad5d57076c2d742d85a5837be",
     "prototype/phone-fit.css": "162c346177d2f4fe3c809fc9a2fa7071dcc390d5b2499f11f9760b42c15b928d",
-    "prototype/home-phone.css": "bee6a03001864cacafbdc90c1c5589f424b478c14a61179718f5823d89f10a97",
+    "prototype/home-phone.css": "1fec66cdacbe424f49b23bc466f487b0e2ddfaac62ccf53aa0e80fffe2abab95",
     "prototype/tour-guide.js": "7c3874bd2c5cdaae1a02d79af2415242d86a24de459d547213ed475ee88f32bc",
     "prototype/interaction-tools.js": "0f9d375a54e84ff066b287f0cdd0b873019538da4680d4d4e748b1e1e4d84888",
-    "prototype/index.html": "95340ade3d5fe6b767ed373bbbe8e3557d8d0ed10f18f6ced5b45b4daf5907e9",
+    "prototype/index.html": "750611d5197e0c37a615da5ed0e4e79a25f8478654b48caf3ff8fc9d3cf331dd",
     "prototype/practice.html": "8c589ba81caba1cd8df97f3f5c88c2e72cddf945d930da68ca850c3c3ef8e418",
     "prototype/exam.html": "5c1cd7bf6b024c605309623e1bb7a970806c1a31c92977931f3440812217f48f",
     "prototype/game.html": "9027de9c9967219cd52c7cd30f7b7d10b7058cde757149d2d35ceae7209dbca6",
